@@ -10,5 +10,5 @@ import java.util.Optional;
 @Component
 public interface TicketRepository extends MongoRepository<Ticket, Integer> {
 
-    Optional<Ticket> findByTicketId(Integer ticketId);
+    Optional<Ticket> findById(String ticketId);
 }

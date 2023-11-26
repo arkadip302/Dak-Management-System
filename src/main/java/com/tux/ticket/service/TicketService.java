@@ -47,7 +47,7 @@ public class TicketService {
 
     public Ticket fetchTicket(String ticketId, String token) {
         if(callRemoteApi(token)) {
-            return ticketRepository.findByTicketId(Integer.parseInt(ticketId)).orElseThrow(()->
+            return ticketRepository.findById(ticketId).orElseThrow(()->
                     new CustomServiceException("Error While Fetching The Tickets "));
         }else{
             return null;
