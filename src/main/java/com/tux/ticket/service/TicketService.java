@@ -21,7 +21,7 @@ public class TicketService {
     @Autowired
     TicketRepository ticketRepository;
 
-    private String iamAppUrl = "http://localhost:8081/iam/v1/auth";
+    private String iamAppUrl = "http://app:8081/iam/v1/auth";
 
     @Autowired
     private final RestTemplate restTemplate;
@@ -57,7 +57,7 @@ public class TicketService {
 
     public boolean callRemoteApi(String token) {
         String apiUrl = iamAppUrl + "/validate?token="+token;
-
+        System.out.println("apiUrl"+ apiUrl);
         if(restTemplate.getForEntity(apiUrl, String.class).getBody().contains("true")){
             return true;
         }else{
