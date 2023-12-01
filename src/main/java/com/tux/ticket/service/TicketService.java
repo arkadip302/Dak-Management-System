@@ -8,9 +8,13 @@ import com.tux.ticket.repository.TicketRepository;
 import com.tux.ticket.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class TicketService {
@@ -21,7 +25,8 @@ public class TicketService {
     @Autowired
     TicketRepository ticketRepository;
 
-    private String iamAppUrl = "http://app:8081/iam/v1/auth";
+    @Value("${app.iamAppUrl}")
+    private String iamAppUrl;
 
     @Autowired
     private final RestTemplate restTemplate;
@@ -39,15 +44,19 @@ public class TicketService {
                     new CustomServiceException("Not Able To Find Create User")));
             ticket.setAssignedUser(userRepository.findByName(createTicketDTO.getAssignedUser()).orElseThrow(() ->
                     new CustomServiceException("Not Able To Find Assigned User")));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = dateFormat.format(new Date());
+            String ticketId= ticketRepository.findByCreatedUserOffice(ticket.getCreatedUser().getOffice().toString()).size()+1+"/DMS/"+ticket.getCreatedUser().getOffice().toString()+"/"+formattedDate;
+            ticket.setTicketId(ticketId);
             ticketRepository.save(ticket);
-            return "Ticket Created !!!";
+            return ticketId;
         }
         return "Ticket Creation Failed !!!";
     }
 
     public Ticket fetchTicket(String ticketId, String token) {
         if(callRemoteApi(token)) {
-            return ticketRepository.findById(ticketId).orElseThrow(()->
+            return ticketRepository.findByTicketId(ticketId).orElseThrow(()->
                     new CustomServiceException("Error While Fetching The Tickets "));
         }else{
             return null;

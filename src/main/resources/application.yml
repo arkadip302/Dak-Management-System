@@ -6,3 +6,5 @@ spring:
       database: dms
 server:
   port: 8082
+app:
+    iamAppUrl: "http://app:8081/iam/v1/auth"
