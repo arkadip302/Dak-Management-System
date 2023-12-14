@@ -14,7 +14,7 @@ public interface TicketRepository extends MongoRepository<Ticket, Integer> {
 
     Optional<Ticket> findByTicketId(String ticketId);
 
-    @Query("{'createdUser.office': ?0}")
+    @Query("{'createdUser.office.officeName': ?0}")
 
     List<Ticket> findByCreatedUserOffice(String officeValue);
 
