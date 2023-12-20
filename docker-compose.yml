@@ -6,7 +6,7 @@ services:
     ports:
       - "8082:8082"
     networks:
-      - iam_my-network1
+      - configstore_tux_network
     environment:
       MONGO_URL: mongodb://mongodb:27017
     depends_on:
@@ -17,9 +17,9 @@ services:
     ports:
       - "27018:27017"
     networks:
-      - iam_my-network1
+      - configstore_tux_network
 networks:
-  iam_my-network1:
+  configstore_tux_network:
     external: true
 volumes:
   monogo-user-data:
